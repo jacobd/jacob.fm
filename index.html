@@ -1,0 +1,340 @@
+
+<!doctype html> 
+<html lang="en"> 
+    <head> 
+        <meta charset="utf-8"> 
+        <title>&#9834; radio Jacob &#9834;</title> 
+        
+    	<style type="text/css"> 
+            html {
+                background:#FFF;
+            }
+            body {
+                color:#696969;
+                z-index:-11;
+                padding:100px 0 40px;
+                margin:0 auto;
+                overflow:hidden;
+                font-family:Lucida Grande;
+            }
+            a {
+                color:#535352;
+            }
+            
+            #spaceship {
+                width:300px;
+                margin:0 auto 0;
+                position:relative;
+                padding:0;
+            }
+            #status {
+                display:none;
+                background:#EEE;
+                border:1px solid #CCC;
+                padding:10px;
+                margin:15px 0 0 0;
+                -webkit-border-radius:8px;
+                -moz-border-radius:8px;
+                z-index:1000;
+            }
+            #status .date {
+                font-size:11px;
+                padding:5px 0 0;
+            }
+            #next {
+                z-index:1000;
+                display:none;
+                cursor:pointer;
+                margin:15px 0 0;
+                font-size:12px;
+                font-weight:bold;
+                background:#999;
+                border:1px solid #777;
+                color:#FFF;
+                text-align:center;
+                text-shadow: 0 0 2px #000;
+                padding:10px;
+                -webkit-border-radius:8px;
+                -moz-border-radius:8px;
+            }
+            #next:hover {
+                background:#AAA;
+            }
+            #status h1 {
+                margin:0;
+                font-size:14px;
+            }
+            #status h2 {
+                margin:5px 0 0;
+                font-size:11px;
+            }
+            .jacob.head.image {
+                position:absolute;
+                left:68px;
+                top:0px;
+                z-index:1000;
+            }
+            .note {
+                position:absolute;
+                top:107px;
+                left:150px;
+                z-index:-10;
+                color:#000;
+            }
+            #video {
+                width:300px;
+                height:250px;
+                overflow:hidden;
+                -webkit-box-shadow:0 0 20px #888;
+                -moz-box-shadow:0 0 20px #888;
+                background:#000;
+                -webkit-border-radius:8px;
+                -moz-border-radius:8px;
+                
+            }
+            #video {
+                z-index:1000;
+            }
+            #boxx {
+                text-align:center;
+                line-height:2d00px;
+            }
+            
+            #about {
+                position:fixed; 
+                bottom:0;
+                left:0;
+                background:#EEE;
+                border-top:1px solid #CCC;
+                font-size:11px;
+                display:block;
+                width:100%;
+            }
+            #about p {
+                margin:0;
+                text-align:center;
+                padding:10px;}
+    	</style> 
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script> 
+        <script type="text/javascript"> 
+        google.load("jquery","1.4");
+        google.load("swfobject", "2.2");
+ 
+        if(location.href.substring(0,15)=='http://jacob.fm'){
+            var lastfmuser = 'jacobd';
+        }else{
+            var subdomain = location.href.match(/http:\/\/([^\.]*)\.jacob\.fm/);
+            if(subdomain.length>1 && subdomain[1] != 'www'){
+                var lastfmuser = subdomain[1];
+                document.title = "radio "+lastfmuser+""
+            }else{
+                var lastfmuser = 'jacobd';
+            }
+        }
+ 
+        var headpos = 0;
+        var bpm = 120;
+        var headinterval;
+        var notesinterval;
+        var head;
+        var videocount = 0;
+        var videoid;
+        var lastfmpage = 1;
+        var lastfmperpage = 50;
+        var lastfmtracks = [];
+        var lastfmcurrenttrack = 0;
+        var duration = 0;
+        var angle = 0;
+        var color = {
+            r:Math.round(Math.random()*255),
+            g:Math.round(Math.random()*255),
+            b:Math.round(Math.random()*255),
+            ri:1,
+            gi:1,
+            bi:1
+        };
+                
+        var notes = function(){
+ 
+                if(color.r+color.ri>255 || color.r+color.ri<0){
+                    color.ri *= -1;
+                }
+                color.r += color.ri;
+                
+                if(color.g+color.gi>255 || color.g+color.gi<0){
+                    color.gi *= -1;
+                }
+                color.g += color.gi;
+                
+                if(color.b+color.bi>255 || color.b+color.bi<0){
+                    color.bi *= -1;
+                }
+                color.b += color.bi;
+                
+            
+                angle += .0314;
+                $("<div>&#9834;</div>")
+                    .addClass('note')
+                    .css({
+                        color:"RGB("+color.r+","+color.g+","+color.b+")",
+                        fontSize:10+Math.floor(Math.random()*60)
+                    })
+                    .html(
+                    "&#"+(9833+Math.floor(Math.random()*5))+";"
+                    )
+                    .appendTo("#spaceship")
+                    .animate({
+                        left:Math.ceil(Math.sin(angle)*800),
+                        top:Math.ceil(Math.cos(angle)*800),
+                        opacity:0
+                    },(2500+Math.floor(Math.random()*2500)),function(){
+                        $(this).remove();
+                    });
+ 
+                $("<div>&#9834;</div>")
+                    .addClass('note')
+                    .css({
+                        color:"RGB("+color.r+","+color.g+","+color.b+")",
+                        fontSize:10+Math.floor(Math.random()*60)
+                    })
+                    .html(
+                    "&#"+(9833+Math.floor(Math.random()*5))+";"
+                    )
+                    .appendTo("#spaceship")
+                    .animate({
+                        left:Math.ceil(Math.sin(angle+3.14)*800),
+                        top:Math.ceil(Math.cos(angle+3.14)*800),
+                        opacity:0
+                    },(2500+Math.floor(Math.random()*2500)),function(){
+                        $(this).remove();
+                    });                    
+ 
+        }
+        
+        function onYouTubePlayerReady(playerId) {
+            ytplayer = document.getElementById('jacobplayer');
+            ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
+        }
+        
+        function onytplayerStateChange(newState) {
+            if(newState==1){
+                clearInterval(notesinterval);
+                notesinterval = setInterval(notes,50);
+            }else{
+                clearInterval(notesinterval);
+            }
+            if(newState==0){
+                
+                lastfmcurrenttrack++;
+                playtrack();
+            }
+            if(newState==5){
+                document.getElementById("jacobplayer").playVideo();
+            }
+        }
+ 
+        var playtrack = function(){
+        
+            if(lastfmcurrenttrack==lastfmtracks.length){
+                return gettracks();
+            }
+        
+            clearInterval(notesinterval);
+            
+            $('#video').html("<div id=boxx></div>");
+            var search = lastfmtracks[lastfmcurrenttrack].artist['#text']+' '+lastfmtracks[lastfmcurrenttrack].name;
+            $('#status').html(
+                "<h1>"+lastfmtracks[lastfmcurrenttrack].artist['#text']+"</h1>"+
+                "<h2>"+lastfmtracks[lastfmcurrenttrack].name+"</h2>"+ (
+                (typeof lastfmtracks[lastfmcurrenttrack]['@attr'] != 'undefined' && typeof lastfmtracks[lastfmcurrenttrack]['@attr'].nowplaying != 'undefined') ?
+                    "<div class=date>"+lastfmuser+" is listening to this right now!</div>"
+                    :
+                    "<div class=date>"+lastfmuser+" listened to this on "+lastfmtracks[lastfmcurrenttrack].date['#text']+".</div>")
+            ).fadeIn('slow',function(){
+                
+                if(lastfmcurrenttrack+1==lastfmtracks.length){
+            
+                    $('#next').html(
+                        "Click to load more tracks &rarr;"
+                    ).fadeIn('slow');
+                
+                }else{
+            
+                    $('#next').html(
+                        'Up Next: '+lastfmtracks[lastfmcurrenttrack+1].artist['#text']+" &ndash; "+lastfmtracks[lastfmcurrenttrack+1].name+" &rarr;"
+                    ).fadeIn('slow');
+                
+                }
+            
+            });
+            
+            queryyoutube(search);
+        }
+        
+        var gettracks = function(){
+ 
+            var url = "http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user="+lastfmuser+"&limit="+lastfmperpage+"&page="+lastfmpage+"&format=json&api_key=5a509d3493e0f21da7e9166462ae2f62&callback=?";
+            lastfmpage++;
+            $.getJSON(url,function(data){
+                lastfmtracks = lastfmtracks.concat(data.recenttracks.track);
+                playtrack();
+            });
+            return url;
+        }
+        var queryyoutube = function(term){
+            var url = "http://gdata.youtube.com/feeds/api/videos?q="+escape(term)+"&orderby=relevance&start-index=1&max-results=10&format=5&alt=json&callback=?";
+            $.getJSON(url,function(data){
+                //url:data.feed.entry[0].media$group.media$content[0].url
+                //duration:data.feed.entry[0].media$group.media$content[0].duration
+                if(typeof data.feed.entry == 'undefined'){
+                    lastfmcurrenttrack++;
+                    return playtrack();
+                }
+                var id = data.feed.entry[0].id.$t.split('/');
+                id = id[id.length-1];
+                
+                $('#video').html("<div id=boxx></div>");
+ 
+                var params = { hd:1, showinfo:0, iv_load_policy:3, border: 0, allowScriptAccess: "always" };
+                var atts = { id:'jacobplayer' };
+                
+                duration = data.feed.entry[0].media$group.media$content[0].duration;
+                
+                swfobject.embedSWF("http://www.youtube.com/v/"+id+"?enablejsapi=1&playerapiid=jacobplayer","boxx", "300", "250", "9", null, null, params, atts);
+                //document.getElementById("myytplayer").playVideo();
+ 
+                       
+                       
+            });
+            return url;
+        }
+        google.setOnLoadCallback(function() {
+            $('#next').click(function(){ ++lastfmcurrenttrack; playtrack(); });
+            gettracks();
+        });
+        </script>    	
+    	
+    </head> 
+    <body> 
+    <script type="text/javascript"> 
+var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-69715-18']);
+  _gaq.push(['_trackPageview']);
+ 
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+  })();
+</script> 
+    <div id="spaceship"> 
+        <div id="video"><div id="boxx">Loading...</div></div> 
+        <div id="status"></div> 
+        <div id="next"></div> 
+    </div> 
+    
+        <div id="about"> 
+            <p>Made by <a href="http://www.jacobd.com" rel="me">Jacob DeHart</a> &copy;2010.  Powered by <a href="http://www.last.fm/user/jacobd">Last.fm</a> and Youtube. Follow me on <a href="http://twitter.com/jacobdehart">Twitter</a> and <a href="http://www.jacobd.com">Tumblr</a></p> 
+        </div> 
+</body> 
+</html>
